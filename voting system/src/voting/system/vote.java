@@ -4,6 +4,17 @@
  */
 package voting.system;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author NUREDIN
@@ -15,6 +26,12 @@ public class vote extends javax.swing.JFrame {
      */
     public vote() {
         initComponents();
+        dbconnect();
+           try {
+            Display_table();
+        } catch (SQLException ex) {
+            Logger.getLogger(vote.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -26,17 +43,60 @@ public class vote extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jComboBox1 = new javax.swing.JComboBox<>();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "candidate ID", "candidate name", "candiate party"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, true, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(314, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 124, Short.MAX_VALUE))
         );
 
         pack();
@@ -76,7 +136,53 @@ public class vote extends javax.swing.JFrame {
             }
         });
     }
+    
+        Connection con;
+    PreparedStatement pst;
+    
+     public void dbconnect(){
+     
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con=DriverManager.getConnection("jdbc:mysql://localhost/voting_system","root","");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+       
+    }
+    
+       private void Display_table() throws SQLException{
+        DefaultTableModel df=(DefaultTableModel)jTable1.getModel();
+        pst=con.prepareStatement("SELECT * FROM `candidate`");
+        ResultSet rs;
+        rs = pst.executeQuery();
+        ResultSetMetaData rss=rs.getMetaData();
+        int c=rss.getColumnCount();
+        df.setRowCount(0);
+        while(rs.next()){
+            Vector vc=new Vector();
+            for(int i=0;i<=c;i++){
+                vc.add(rs.getString("candidate_ID_no"));
+                vc.add(rs.getString("candidate_name"));
+                vc.add(rs.getString("candidate_party_name"));
+                
+               
+            }
+            jComboBox1.addItem(rs.getString("candidate_ID_no"));
+            df.addRow(vc);
+            
+        }
+        
+    }
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
