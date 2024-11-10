@@ -7,6 +7,8 @@ package voting.system;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -186,11 +188,17 @@ public class HomePage extends javax.swing.JFrame {
             
             ResultSet rs;
            rs = pst.executeQuery();
+           ResultSetMetaData rss=rs.getMetaData();
+           
+           int column=rss.getColumnCount();
             
-            if(rs){
+            if(rs.next()){
                 JOptionPane.showMessageDialog(rootPane, "succes");
+               setVisible(false);
+               new vote().setVisible(true);
             }else{
                 JOptionPane.showMessageDialog(rootPane, "error");
+                
             }
         } catch (SQLException ex) {
             Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
