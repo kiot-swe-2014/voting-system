@@ -19,18 +19,18 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author NUREDIN
  */
-public class vote extends javax.swing.JFrame {
+public class VotePage extends javax.swing.JFrame {
 
     /**
      * Creates new form vote
      */
-    public vote() {
+    public VotePage() {
         initComponents();
         dbconnect();
            try {
             Display_table();
         } catch (SQLException ex) {
-            Logger.getLogger(vote.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(VotePage.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -148,20 +148,21 @@ public class vote extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(vote.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VotePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(vote.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VotePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(vote.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VotePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(vote.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VotePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new vote().setVisible(true);
+                new VotePage().setVisible(true);
             }
         });
     }
