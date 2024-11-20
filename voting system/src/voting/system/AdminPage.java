@@ -89,7 +89,7 @@ public class AdminPage extends javax.swing.JFrame {
 
     private void manageUsersActionPerformed(ActionEvent evt) {
         // Open a ManageUsers Page (to be implemented)
-        JOptionPane.showMessageDialog(this, "Manage Users button clicked!");
+       new ManageUsersPage().setVisible(true);
     }
 
     private void manageElectionsActionPerformed(ActionEvent evt) {
