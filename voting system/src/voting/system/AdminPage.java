@@ -94,6 +94,7 @@ public class AdminPage extends javax.swing.JFrame {
 
     private void manageElectionsActionPerformed(ActionEvent evt) {
         // Open a ManageElections Page (to be implemented)
+        
         JOptionPane.showMessageDialog(this, "Manage Elections button clicked!");
     }
 
