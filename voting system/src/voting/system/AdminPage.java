@@ -26,66 +26,77 @@ public class AdminPage extends javax.swing.JFrame {
     /**
      * Initialize components
      */
-    private void initComponents() {
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Admin Dashboard");
+  private void initComponents() {
+    setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+    setTitle("Admin Dashboard");
 
-        // Header label
-        JLabel headerLabel = new JLabel("Admin Dashboard", SwingConstants.CENTER);
-        headerLabel.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 24));
-        
-        // Buttons
-        JButton manageUsersButton = new JButton("Manage Users");
-        JButton manageElectionsButton = new JButton("Manage Elections");
-        JButton logoutButton = new JButton("Logout");
+    // Header label
+    JLabel headerLabel = new JLabel("Admin Dashboard", SwingConstants.CENTER);
+    headerLabel.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 24));
 
-        // Add Action Listeners
-        manageUsersButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                manageUsersActionPerformed(evt);
-            }
-        });
+    // Buttons
+    JButton manageUsersButton = new JButton("Manage Users");
+    JButton manageElectionsButton = new JButton("Manage Elections");
+    JButton manageCandidatesButton = new JButton("Manage Candidates");
+    JButton logoutButton = new JButton("Logout");
 
-        manageElectionsButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                manageElectionsActionPerformed(evt);
-            }
-        });
+    // Add Action Listeners
+    manageUsersButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent evt) {
+            manageUsersActionPerformed(evt);
+        }
+    });
 
-        logoutButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                logoutActionPerformed(evt);
-            }
-        });
+    manageElectionsButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent evt) {
+            manageElectionsActionPerformed(evt);
+        }
+    });
 
-        // Layout
-        GroupLayout layout = new GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                .addComponent(headerLabel, GroupLayout.PREFERRED_SIZE, 400, GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(100)
-                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                        .addComponent(manageUsersButton, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
-                        .addComponent(manageElectionsButton, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
-                        .addComponent(logoutButton, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)))
-        );
+    manageCandidatesButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent evt) {
+            manageCandidatesActionPerformed(evt);
+        }
+    });
 
-        layout.setVerticalGroup(
-            layout.createSequentialGroup()
-                .addGap(20)
-                .addComponent(headerLabel, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
-                .addGap(30)
-                .addComponent(manageUsersButton, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-                .addGap(20)
-                .addComponent(manageElectionsButton, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-                .addGap(20)
-                .addComponent(logoutButton, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-        );
+    logoutButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent evt) {
+            logoutActionPerformed(evt);
+        }
+    });
 
-        pack();
-    }
+    // Layout
+    GroupLayout layout = new GroupLayout(getContentPane());
+    getContentPane().setLayout(layout);
+    layout.setHorizontalGroup(
+        layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+            .addComponent(headerLabel, GroupLayout.PREFERRED_SIZE, 400, GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(100)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                    .addComponent(manageUsersButton, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(manageElectionsButton, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(manageCandidatesButton, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(logoutButton, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)))
+    );
+
+    layout.setVerticalGroup(
+        layout.createSequentialGroup()
+            .addGap(20)
+            .addComponent(headerLabel, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+            .addGap(30)
+            .addComponent(manageUsersButton, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+            .addGap(20)
+            .addComponent(manageElectionsButton, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+            .addGap(20)
+            .addComponent(manageCandidatesButton, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+            .addGap(20)
+            .addComponent(logoutButton, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+    );
+
+    pack();
+}
+
 
     private void manageUsersActionPerformed(ActionEvent evt) {
         // Open a ManageUsers Page (to be implemented)
@@ -103,6 +114,11 @@ public class AdminPage extends javax.swing.JFrame {
         setVisible(false);
         new HomePage().setVisible(true);
     }
+    
+    private void manageCandidatesActionPerformed(ActionEvent evt) {
+    new ManageCandidatesPage().setVisible(true);
+}
+
 
     /**
      * Main method
