@@ -180,7 +180,13 @@ public class HomePage extends javax.swing.JFrame {
     private void loginButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMouseClicked
        String Username=username.getText();
        String Password=password.getText();
-       String Query="SELECT  `voter_username`, `voter_password` FROM `voter` WHERE `voter_username`=? AND `voter_password`=? ";
+       
+         if (Username.isEmpty() || Password.isEmpty()) {
+        JOptionPane.showMessageDialog(rootPane, "Username and password cannot be empty.");
+        return;
+    }
+       
+       String Query="SELECT  `username`, `password`,`role` FROM `users` WHERE `username`=? AND `password`=? ";
         try {
             pst =con.prepareStatement(Query);
             pst.setString(1,Username);
@@ -193,9 +199,20 @@ public class HomePage extends javax.swing.JFrame {
            int column=rss.getColumnCount();
             
             if(rs.next()){
-                JOptionPane.showMessageDialog(rootPane, "succes");
-               setVisible(false);
-               new vote().setVisible(true);
+               String role = rs.getString("role");
+
+            // Redirect based on role
+            if ("admin".equalsIgnoreCase(role)) {
+                JOptionPane.showMessageDialog(rootPane, "Welcome Admin!");
+                setVisible(false);
+                new AdminPage().setVisible(true); // Redirect to AdminPage
+            } else if ("voter".equalsIgnoreCase(role)) {
+                JOptionPane.showMessageDialog(rootPane, "Welcome Voter!");
+                setVisible(false);
+                new VotePage().setVisible(true); // Redirect to VotePage
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Unknown role. Please contact the administrator.");
+            }
             }else{
                 JOptionPane.showMessageDialog(rootPane, "error");
                 
