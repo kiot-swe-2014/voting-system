@@ -178,28 +178,25 @@ public class HomePage extends javax.swing.JFrame {
     }//GEN-LAST:event_passwordActionPerformed
 
     private void loginButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMouseClicked
-       String Username=username.getText();
-       String Password=password.getText();
-       
-         if (Username.isEmpty() || Password.isEmpty()) {
+String usernameInput = username.getText();
+    String passwordInput = password.getText(); // Use getPassword() for security
+
+    if (usernameInput.isEmpty() || passwordInput.isEmpty()) {
         JOptionPane.showMessageDialog(rootPane, "Username and password cannot be empty.");
         return;
     }
-       
-       String Query="SELECT  `username`, `password`,`role` FROM `users` WHERE `username`=? AND `password`=? ";
-        try {
-            pst =con.prepareStatement(Query);
-            pst.setString(1,Username);
-            pst.setString(2, Password);
-            
-            ResultSet rs;
-           rs = pst.executeQuery();
-           ResultSetMetaData rss=rs.getMetaData();
-           
-           int column=rss.getColumnCount();
-            
-            if(rs.next()){
-               String role = rs.getString("role");
+
+    String query = "SELECT `id`, `username`, `password`, `role` FROM `users` WHERE `username` = ? AND `password` = ?";
+    try {
+        pst = con.prepareStatement(query);
+        pst.setString(1, usernameInput);
+        pst.setString(2, String.valueOf(passwordInput)); // Convert char[] to String
+
+        ResultSet rs = pst.executeQuery();
+
+        if (rs.next()) {
+            int userId = rs.getInt("id"); // Declare and initialize userId here
+            String role = rs.getString("role");
 
             // Redirect based on role
             if ("admin".equalsIgnoreCase(role)) {
@@ -209,17 +206,23 @@ public class HomePage extends javax.swing.JFrame {
             } else if ("voter".equalsIgnoreCase(role)) {
                 JOptionPane.showMessageDialog(rootPane, "Welcome Voter!");
                 setVisible(false);
-                new VotePage().setVisible(true); // Redirect to VotePage
+                new VoterPage(userId).setVisible(true); // Pass userId to VoterPage
             } else {
                 JOptionPane.showMessageDialog(rootPane, "Unknown role. Please contact the administrator.");
             }
-            }else{
-                JOptionPane.showMessageDialog(rootPane, "error");
-                
-            }
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Invalid username or password.");
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
+        JOptionPane.showMessageDialog(rootPane, "An error occurred while trying to log in. Please try again.");
+    } finally {
+        try {
+            if (pst != null) pst.close();
         } catch (SQLException ex) {
             Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
     }//GEN-LAST:event_loginButtonMouseClicked
 
     /**
