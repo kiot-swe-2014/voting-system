@@ -42,7 +42,7 @@ public class VoterPage extends JFrame {
         headerLabel.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 24));
 
         // Elections table
-        electionsTableModel = new DefaultTableModel(new String[]{"Election ID", "Election Name", "Start Date", "End Date", "Status"}, 0);
+        electionsTableModel = new DefaultTableModel(new String[]{"Election ID", "Election Name", "Start Date", "End Date"}, 0);
         electionsTable = new JTable(electionsTableModel);
         JScrollPane electionsScrollPane = new JScrollPane(electionsTable);
 
@@ -104,8 +104,13 @@ public class VoterPage extends JFrame {
 
     private void loadElections() {
         try {
-            electionsTableModel.setRowCount(0);
-            String query = "SELECT id, election_name, start_date, end_date, status FROM elections";
+            electionsTableModel.setRowCount(0); // Clear existing rows
+
+            // Query to filter elections where the current date is within the start and end date
+            String query = "SELECT id, election_name, start_date, end_date " +
+                           "FROM elections " +
+                           "WHERE CURDATE() BETWEEN start_date AND end_date";
+
             PreparedStatement stmt = con.prepareStatement(query);
             ResultSet rs = stmt.executeQuery();
 
@@ -114,8 +119,7 @@ public class VoterPage extends JFrame {
                 String name = rs.getString("election_name");
                 Date startDate = rs.getDate("start_date");
                 Date endDate = rs.getDate("end_date");
-                String status = rs.getBoolean("status") ? "Active" : "Inactive";
-                electionsTableModel.addRow(new Object[]{id, name, startDate, endDate, status});
+                electionsTableModel.addRow(new Object[]{id, name, startDate, endDate});
             }
         } catch (SQLException ex) {
             Logger.getLogger(VoterPage.class.getName()).log(Level.SEVERE, null, ex);
