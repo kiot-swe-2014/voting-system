@@ -62,7 +62,7 @@ public class ViewResultsPage extends JFrame {
             tableModel.setRowCount(0); // Clear existing rows
             String query = "SELECT c.name, c.party, COUNT(v.id) AS votes " +
                            "FROM candidates c " +
-                           "LEFT JOIN votes v ON c.id = v.choice " +
+                           "LEFT JOIN votes v ON c.id = v.candidate_id " +
                            "GROUP BY c.id, c.name, c.party";
             PreparedStatement stmt = con.prepareStatement(query);
             ResultSet rs = stmt.executeQuery();

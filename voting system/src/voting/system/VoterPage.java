@@ -162,7 +162,7 @@ public class VoterPage extends JFrame {
 
             try {
                 // Check if the user has already voted
-                String checkQuery = "SELECT * FROM votes WHERE user_id = ? AND poll_id = ?";
+                String checkQuery = "SELECT * FROM votes WHERE user_id = ? AND election_id = ?";
                 PreparedStatement checkStmt = con.prepareStatement(checkQuery);
                 checkStmt.setInt(1, userId);
                 checkStmt.setInt(2, electionId);
@@ -174,7 +174,7 @@ public class VoterPage extends JFrame {
                 }
 
                 // Insert vote
-                String query = "INSERT INTO votes (user_id, poll_id, choice) VALUES (?, ?, ?)";
+                String query = "INSERT INTO votes (user_id, election_id, candidate_id) VALUES (?, ?, ?)";
                 PreparedStatement stmt = con.prepareStatement(query);
                 stmt.setInt(1, userId);
                 stmt.setInt(2, electionId);
