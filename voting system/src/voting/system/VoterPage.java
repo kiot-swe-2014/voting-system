@@ -2,6 +2,7 @@ package voting.system;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
@@ -36,24 +37,52 @@ public class VoterPage extends JFrame {
     private void initComponents() {
         setTitle("Voter Page");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout());
+        setPreferredSize(new Dimension(800, 500));
 
         // Header label
         JLabel headerLabel = new JLabel("Welcome, Voter", SwingConstants.CENTER);
-        headerLabel.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 24));
+        headerLabel.setFont(StyleUtil.HEADER_FONT);
+        headerLabel.setForeground(StyleUtil.TEXT_COLOR);
+
+        // Style header panel
+        JPanel headerPanel = new JPanel();
+        StyleUtil.stylePanel(headerPanel, StyleUtil.PRIMARY_COLOR);
+        headerPanel.add(headerLabel);
+        add(headerPanel, BorderLayout.NORTH);
 
         // Elections table
         electionsTableModel = new DefaultTableModel(new String[]{"Election ID", "Election Name", "Start Date", "End Date"}, 0);
         electionsTable = new JTable(electionsTableModel);
         JScrollPane electionsScrollPane = new JScrollPane(electionsTable);
+        electionsTable.setFont(new Font("Arial", Font.PLAIN, 14));
+        electionsTable.setBackground(StyleUtil.SECONDARY_COLOR);
+        electionsTable.setSelectionBackground(StyleUtil.ACCENT_COLOR);
 
         // Candidates table
         candidatesTableModel = new DefaultTableModel(new String[]{"Candidate ID", "Name", "Party", "Description"}, 0);
         candidatesTable = new JTable(candidatesTableModel);
         JScrollPane candidatesScrollPane = new JScrollPane(candidatesTable);
+        candidatesTable.setFont(new Font("Arial", Font.PLAIN, 14));
+        candidatesTable.setBackground(StyleUtil.SECONDARY_COLOR);
+        candidatesTable.setSelectionBackground(StyleUtil.ACCENT_COLOR);
 
         // Buttons
         JButton viewCandidatesButton = new JButton("View Candidates");
         JButton castVoteButton = new JButton("Cast Vote");
+
+        // Style buttons
+        viewCandidatesButton.setFont(StyleUtil.BUTTON_FONT);
+        viewCandidatesButton.setBackground(StyleUtil.ACCENT_COLOR);
+        viewCandidatesButton.setForeground(Color.WHITE);
+        viewCandidatesButton.setFocusPainted(false);
+        viewCandidatesButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        castVoteButton.setFont(StyleUtil.BUTTON_FONT);
+        castVoteButton.setBackground(StyleUtil.ACCENT_COLOR);
+        castVoteButton.setForeground(Color.WHITE);
+        castVoteButton.setFocusPainted(false);
+        castVoteButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         // Add action listeners
         viewCandidatesButton.addActionListener(new ActionListener() {
@@ -70,34 +99,17 @@ public class VoterPage extends JFrame {
             }
         });
 
-        // Layout
-        GroupLayout layout = new GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                .addComponent(headerLabel, GroupLayout.PREFERRED_SIZE, 400, GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createSequentialGroup()
-                    .addComponent(electionsScrollPane, GroupLayout.PREFERRED_SIZE, 400, GroupLayout.PREFERRED_SIZE)
-                    .addGap(20)
-                    .addComponent(candidatesScrollPane, GroupLayout.PREFERRED_SIZE, 400, GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createSequentialGroup()
-                    .addComponent(viewCandidatesButton, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
-                    .addGap(20)
-                    .addComponent(castVoteButton, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE))
-        );
+        // Footer panel for buttons
+        JPanel footerPanel = new JPanel();
+        footerPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        StyleUtil.stylePanel(footerPanel, StyleUtil.PRIMARY_COLOR);
+        footerPanel.add(viewCandidatesButton);
+        footerPanel.add(castVoteButton);
 
-        layout.setVerticalGroup(
-            layout.createSequentialGroup()
-                .addComponent(headerLabel, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
-                .addGap(20)
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(electionsScrollPane, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(candidatesScrollPane, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
-                .addGap(20)
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(viewCandidatesButton, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(castVoteButton, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE))
-        );
+        // Add components to the frame
+        add(electionsScrollPane, BorderLayout.CENTER);
+        add(candidatesScrollPane, BorderLayout.EAST);
+        add(footerPanel, BorderLayout.SOUTH);
 
         pack();
     }

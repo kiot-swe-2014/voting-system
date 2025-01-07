@@ -1,19 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package voting.system;
-
-/**
- *
- * @author NUREDIN
- */
-
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,62 +30,62 @@ public class ManageCandidatesPage extends JFrame {
     private void initComponents() {
         setTitle("Manage Candidates");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(800, 600);
+        setLocationRelativeTo(null);
+
+        // Main panel styling
+        JPanel mainPanel = new JPanel();
+        StyleUtil.stylePanel(mainPanel, StyleUtil.PRIMARY_COLOR);
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
         // Header label
         JLabel headerLabel = new JLabel("Manage Candidates", SwingConstants.CENTER);
-        headerLabel.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 24));
+        headerLabel.setFont(StyleUtil.HEADER_FONT);
+        headerLabel.setForeground(StyleUtil.TEXT_COLOR);
 
         // Table for displaying candidates
         tableModel = new DefaultTableModel(new String[]{"ID", "Name", "Election ID", "Party"}, 0);
         candidatesTable = new JTable(tableModel);
+        candidatesTable.setFont(StyleUtil.BUTTON_FONT);
+        candidatesTable.setForeground(StyleUtil.TEXT_COLOR);
+        candidatesTable.setBackground(StyleUtil.SECONDARY_COLOR);
         JScrollPane tableScrollPane = new JScrollPane(candidatesTable);
 
         // Buttons
-        JButton addCandidateButton = new JButton("Add Candidate");
-        JButton deleteCandidateButton = new JButton("Delete Candidate");
+        JButton addCandidateButton = createStyledButton("Add Candidate");
+        JButton deleteCandidateButton = createStyledButton("Delete Candidate");
+        JButton backButton = createStyledButton("Back");
 
         // Add action listeners
-        addCandidateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addCandidate();
-            }
-        });
-
-        deleteCandidateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                deleteCandidate();
-            }
+        addCandidateButton.addActionListener(e -> addCandidate());
+        deleteCandidateButton.addActionListener(e -> deleteCandidate());
+        backButton.addActionListener(e -> {
+            new AdminPage().setVisible(true);
+            dispose();
         });
 
         // Layout setup
-        GroupLayout layout = new GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                .addComponent(headerLabel, GroupLayout.PREFERRED_SIZE, 400, GroupLayout.PREFERRED_SIZE)
-                .addComponent(tableScrollPane, GroupLayout.PREFERRED_SIZE, 600, GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(100)
-                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                        .addComponent(addCandidateButton, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
-                        .addComponent(deleteCandidateButton, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)))
-        );
+        JPanel buttonPanel = new JPanel();
+        StyleUtil.stylePanel(buttonPanel, StyleUtil.PRIMARY_COLOR);
+        buttonPanel.add(addCandidateButton);
+        buttonPanel.add(deleteCandidateButton);
+        buttonPanel.add(backButton);
 
-        layout.setVerticalGroup(
-            layout.createSequentialGroup()
-                .addGap(20)
-                .addComponent(headerLabel, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
-                .addGap(30)
-                .addComponent(tableScrollPane, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
-                .addGap(20)
-                .addComponent(addCandidateButton, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-                .addGap(20)
-                .addComponent(deleteCandidateButton, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-        );
+        mainPanel.add(headerLabel);
+        mainPanel.add(tableScrollPane);
+        mainPanel.add(buttonPanel);
 
-        pack();
+        add(mainPanel);
+    }
+
+    private JButton createStyledButton(String text) {
+        JButton button = new JButton(text);
+        button.setFont(StyleUtil.BUTTON_FONT);
+        button.setBackground(StyleUtil.ACCENT_COLOR);
+        button.setForeground(StyleUtil.TEXT_COLOR);
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        return button;
     }
 
     private void loadCandidates() {
@@ -115,7 +103,6 @@ public class ManageCandidatesPage extends JFrame {
 
                 tableModel.addRow(new Object[]{id, name, electionId, party});
             }
-
         } catch (SQLException ex) {
             Logger.getLogger(ManageCandidatesPage.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -176,4 +163,3 @@ public class ManageCandidatesPage extends JFrame {
         });
     }
 }
-

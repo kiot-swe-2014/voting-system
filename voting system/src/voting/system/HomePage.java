@@ -179,7 +179,7 @@ public class HomePage extends javax.swing.JFrame {
 
     private void loginButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMouseClicked
 String usernameInput = username.getText();
-    String passwordInput = password.getText(); // Use getPassword() for security
+    String passwordInput = password.getText(); 
 
     if (usernameInput.isEmpty() || passwordInput.isEmpty()) {
         JOptionPane.showMessageDialog(rootPane, "Username and password cannot be empty.");
@@ -190,23 +190,23 @@ String usernameInput = username.getText();
     try {
         pst = con.prepareStatement(query);
         pst.setString(1, usernameInput);
-        pst.setString(2, String.valueOf(passwordInput)); // Convert char[] to String
+        pst.setString(2, String.valueOf(passwordInput));
 
         ResultSet rs = pst.executeQuery();
 
         if (rs.next()) {
-            int userId = rs.getInt("id"); // Declare and initialize userId here
+            int userId = rs.getInt("id"); 
             String role = rs.getString("role");
 
             // Redirect based on role
             if ("admin".equalsIgnoreCase(role)) {
                 JOptionPane.showMessageDialog(rootPane, "Welcome Admin!");
                 setVisible(false);
-                new AdminPage().setVisible(true); // Redirect to AdminPage
+                new AdminPage().setVisible(true); 
             } else if ("voter".equalsIgnoreCase(role)) {
                 JOptionPane.showMessageDialog(rootPane, "Welcome Voter!");
                 setVisible(false);
-                new VoterPage(userId).setVisible(true); // Pass userId to VoterPage
+                new VoterPage(userId).setVisible(true); 
             } else {
                 JOptionPane.showMessageDialog(rootPane, "Unknown role. Please contact the administrator.");
             }
