@@ -1,5 +1,6 @@
 package voting.system;
 
+import java.awt.GridLayout;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
@@ -53,11 +54,13 @@ public class ManageCandidatesPage extends JFrame {
 
         // Buttons
         JButton addCandidateButton = createStyledButton("Add Candidate");
+        JButton editCandidateButton = createStyledButton("Edit Candidate");
         JButton deleteCandidateButton = createStyledButton("Delete Candidate");
         JButton backButton = createStyledButton("Back");
 
         // Add action listeners
         addCandidateButton.addActionListener(e -> addCandidate());
+        editCandidateButton.addActionListener(e -> editCandidate());
         deleteCandidateButton.addActionListener(e -> deleteCandidate());
         backButton.addActionListener(e -> {
             new AdminPage().setVisible(true);
@@ -68,6 +71,7 @@ public class ManageCandidatesPage extends JFrame {
         JPanel buttonPanel = new JPanel();
         StyleUtil.stylePanel(buttonPanel, StyleUtil.PRIMARY_COLOR);
         buttonPanel.add(addCandidateButton);
+        buttonPanel.add(editCandidateButton);
         buttonPanel.add(deleteCandidateButton);
         buttonPanel.add(backButton);
 
@@ -129,6 +133,49 @@ public class ManageCandidatesPage extends JFrame {
                 JOptionPane.showMessageDialog(this, "Error adding candidate: " + ex.getMessage());
             }
             loadCandidates(); // Reload candidates after adding a new one
+        }
+    }
+
+    private void editCandidate() {
+        int selectedRow = candidatesTable.getSelectedRow();
+        if (selectedRow >= 0) {
+            int candidateId = (int) tableModel.getValueAt(selectedRow, 0);
+            String name = (String) tableModel.getValueAt(selectedRow, 1);
+            int electionId = (int) tableModel.getValueAt(selectedRow, 2);
+            String party = (String) tableModel.getValueAt(selectedRow, 3);
+
+            // Create dialog to edit candidate details
+            JTextField nameField = new JTextField(name, 20);
+            JTextField electionIdField = new JTextField(String.valueOf(electionId), 20);
+            JTextField partyField = new JTextField(party, 20);
+
+            JPanel panel = new JPanel(new GridLayout(3, 2));
+            panel.add(new JLabel("Candidate Name:"));
+            panel.add(nameField);
+            panel.add(new JLabel("Election ID:"));
+            panel.add(electionIdField);
+            panel.add(new JLabel("Party:"));
+            panel.add(partyField);
+
+            int option = JOptionPane.showConfirmDialog(this, panel, "Edit Candidate", JOptionPane.OK_CANCEL_OPTION);
+
+            if (option == JOptionPane.OK_OPTION) {
+                try {
+                    String query = "UPDATE candidates SET name = ?, election_id = ?, party = ? WHERE id = ?";
+                    PreparedStatement stmt = con.prepareStatement(query);
+                    stmt.setString(1, nameField.getText());
+                    stmt.setInt(2, Integer.parseInt(electionIdField.getText()));
+                    stmt.setString(3, partyField.getText());
+                    stmt.setInt(4, candidateId);
+                    stmt.executeUpdate();
+                    loadCandidates(); // Reload candidates after editing
+                    JOptionPane.showMessageDialog(this, "Candidate details updated successfully.");
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(this, "Error updating candidate: " + ex.getMessage());
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a candidate to edit.");
         }
     }
 
